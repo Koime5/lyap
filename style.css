@@ -1,10 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Cormorant+Garamond:ital,wght@0,400;1,400;0,500&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap');
 
-/* ---------- DARK THEME (DEFAULT) ---------- */
 :root[data-theme="dark"] {
-    --ink-0: #0d0c0b;
-    --ink-1: #161412;
-    --ink-2: #211e1a;
+    --ink-0: #050505;
+    --ink-1: #0c0b0a;
+    --ink-2: #141311;
     --paper: #ece6d9;
     --paper-dim: #a9a196;
     --gold: #b6934a;
@@ -15,13 +14,14 @@
     --code-str: #9fae8e;
     --code-com: #5f5a52;
     --strip-bg: rgba(22, 20, 18, 0.4);
+    --bg-dot-1: rgba(236, 230, 217, 0.035);
+    --bg-dot-2: rgba(182, 147, 74, 0.025);
 }
 
-/* ---------- LIGHT THEME ---------- */
 :root[data-theme="light"] {
-    --ink-0: #fbf9f5;
-    --ink-1: #f3efe6;
-    --ink-2: #e9e3d5;
+    --ink-0: #e9e4d9;
+    --ink-1: #ddd8cc;
+    --ink-2: #d2cbbe;
     --paper: #1c1a17;
     --paper-dim: #605a52;
     --gold: #8d6b27;
@@ -32,6 +32,8 @@
     --code-str: #3d6b38;
     --code-com: #8c857b;
     --strip-bg: rgba(243, 239, 230, 0.6);
+    --bg-dot-1: rgba(28, 26, 23, 0.025);
+    --bg-dot-2: rgba(141, 107, 39, 0.018);
 }
 
 * {
@@ -46,6 +48,12 @@ html {
 
 body {
     background: var(--ink-0);
+    background-image: 
+        radial-gradient(var(--bg-dot-1) 1.2px, transparent 1.2px),
+        radial-gradient(var(--bg-dot-2) 1.5px, transparent 1.5px);
+    background-size: 32px 32px, 48px 48px;
+    background-attachment: scroll, scroll;
+    animation: bgDrift 90s linear infinite;
     color: var(--paper);
     font-family: 'Inter', sans-serif;
     min-height: 100vh;
@@ -53,11 +61,28 @@ body {
     transition: background 0.3s ease, color 0.3s ease;
 }
 
+@keyframes bgDrift {
+    0% {
+        background-position: 0px 0px, 0px 0px;
+    }
+    100% {
+        background-position: 320px 320px, -288px 288px;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     * {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
+    }
+    body {
+        animation: none !important;
+    }
+    .emblem-bolt {
+        animation: none !important;
+        fill: var(--gold) !important;
+        transform: none !important;
     }
 }
 
@@ -82,6 +107,8 @@ a {
 
 /* ---------- NAV ---------- */
 nav {
+    position: relative;
+    z-index: 2;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -208,8 +235,18 @@ nav {
 /* ---------- HERO ---------- */
 header.hero {
     position: relative;
+    z-index: 2;
     padding: 56px 24px 80px;
     text-align: center;
+}
+
+.hero-bg-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+    pointer-events: none;
 }
 
 @media (min-width: 640px) {
@@ -225,8 +262,8 @@ header.hero {
 }
 
 .emblem {
-    width: 56px;
-    height: 56px;
+    width: 80px;
+    height: 80px;
     margin: 0 auto 44px;
     opacity: 0;
     animation: rise 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
@@ -236,16 +273,16 @@ header.hero {
 
 @media (min-width: 640px) {
     .emblem {
-        width: 72px;
-        height: 72px;
+        width: 104px;
+        height: 104px;
         margin-bottom: 48px;
     }
 }
 
 @media (min-width: 1200px) {
     .emblem {
-        width: 84px;
-        height: 84px;
+        width: 120px;
+        height: 120px;
         margin-bottom: 56px;
     }
 }
@@ -269,6 +306,92 @@ header.hero {
     width: 100%;
     height: 100%;
     filter: drop-shadow(0 0 12px rgba(182, 147, 74, 0.25));
+    overflow: visible;
+}
+
+.emblem-bolt {
+    fill: var(--gold-soft);
+    transform-origin: 40% 94%;
+    animation: 
+        luxuryBoltMotion 6s cubic-bezier(0.25, 1, 0.5, 1) infinite,
+        luxuryBoltColor 6s ease infinite;
+    will-change: transform;
+}
+
+@keyframes luxuryBoltMotion {
+    0% {
+        transform: scale(1) translateY(0) rotate(0deg) skewX(0deg);
+    }
+    16% {
+        transform: scale(1.1) translateY(-14px) rotate(-4deg) skewX(-2deg);
+    }
+    22%, 26%, 34% {
+        transform: scale(1.12) translateY(-16px) rotate(-4deg) skewX(-2deg);
+    }
+    50%, 100% {
+        transform: scale(1) translateY(0) rotate(0deg) skewX(0deg);
+    }
+}
+
+@keyframes luxuryBoltColor {
+    0% {
+        fill: var(--gold-soft);
+        filter: brightness(1) drop-shadow(0 0 0 transparent);
+    }
+    16% {
+        fill: var(--gold);
+        filter: brightness(1.25) drop-shadow(0 6px 16px rgba(182, 147, 74, 0.35));
+    }
+    22% {
+        fill: #ffe875;
+        filter: brightness(2.4) drop-shadow(0 10px 28px rgba(255, 232, 117, 0.9));
+    }
+    24% {
+        fill: var(--gold-soft);
+        filter: brightness(0.85) drop-shadow(0 4px 12px rgba(182, 147, 74, 0.2));
+    }
+    26% {
+        fill: #ffdf43;
+        filter: brightness(2.6) drop-shadow(0 12px 32px rgba(255, 223, 67, 0.95));
+    }
+    34%, 47% {
+        fill: var(--gold);
+        filter: brightness(1.25) drop-shadow(0 6px 16px rgba(182, 147, 74, 0.35));
+    }
+    50%, 100% {
+        fill: var(--gold-soft);
+        filter: brightness(1) drop-shadow(0 0 0 transparent);
+    }
+}
+
+@keyframes manualFlashBoltMotion {
+    0% {
+        transform: scale(1.15) translateY(-16px) rotate(-5deg) skewX(-2deg);
+    }
+    100% {
+        transform: scale(1) translateY(0) rotate(0deg) skewX(0deg);
+    }
+}
+
+@keyframes manualFlashBoltColor {
+    0% {
+        fill: #ffe875;
+        filter: brightness(2.6) drop-shadow(0 12px 32px rgba(255, 223, 67, 0.95));
+    }
+    82% {
+        fill: var(--gold);
+        filter: brightness(1.25) drop-shadow(0 6px 16px rgba(182, 147, 74, 0.35));
+    }
+    100% {
+        fill: var(--gold-soft);
+        filter: brightness(1) drop-shadow(0 0 0 transparent);
+    }
+}
+
+.emblem-bolt.manual-flash {
+    animation: 
+        manualFlashBoltMotion 0.6s cubic-bezier(0.25, 1, 0.5, 1),
+        manualFlashBoltColor 0.6s ease !important;
 }
 
 .eyebrow {
