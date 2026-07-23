@@ -19,9 +19,9 @@
 }
 
 :root[data-theme="light"] {
-    --ink-0: #e9e4d9;
-    --ink-1: #ddd8cc;
-    --ink-2: #d2cbbe;
+    --ink-0: #fbfaf7;
+    --ink-1: #f1ede4;
+    --ink-2: #e5dfd3;
     --paper: #1c1a17;
     --paper-dim: #605a52;
     --gold: #8d6b27;
